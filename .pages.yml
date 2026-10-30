@@ -1,0 +1,99 @@
+media:
+  input: public/uploads
+  output: /uploads
+  categories: [image]
+  rename: safe
+
+content:
+  - name: posts
+    label: 文章
+    type: collection
+    path: src/content/posts
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{year}-{month}-{day}-{fields.slug}.md"
+      field: create
+    view:
+      primary: title
+      fields: [title, published, draft, category]
+      sort: published
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+      - name: slug
+        label: 文章地址标识
+        description: 使用小写字母、数字和短横线，例如 postgres-timeout；发布后尽量不改。
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          message: 请使用小写字母、数字和短横线。
+      - name: published
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: draft
+        label: 草稿（开启时不展示在网站上）
+        type: boolean
+        default: true
+      - name: description
+        label: 摘要
+        type: text
+      - name: category
+        label: 分类
+        type: string
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+      - name: image
+        label: 封面图片
+        type: image
+      - name: body
+        label: 正文
+        type: rich-text
+
+  - name: site
+    label: 网站与个人资料
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - name: title
+        label: 网站名称
+        type: string
+        required: true
+      - name: subtitle
+        label: 网站副标题
+        type: string
+        required: true
+      - name: description
+        label: 网站简介
+        type: text
+        required: true
+      - name: name
+        label: 昵称
+        type: string
+        required: true
+      - name: bio
+        label: 个人简介
+        type: text
+      - name: avatar
+        label: 头像
+        type: image
+
+  - name: about
+    label: 关于页面
+    type: file
+    path: src/content/spec/about.md
+    format: yaml-frontmatter
+    fields:
+      - name: body
+        label: 内容
+        type: rich-text
